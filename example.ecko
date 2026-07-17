@@ -1,0 +1,11 @@
+# stats demo.
+import "./main.ecko"
+stats = main
+
+data = [4, 8, 15, 16, 23, 42]
+print("data:   {data}")
+print("mean:   {stats.mean(data)}")
+print("median: {stats.median(data)}")
+print("stdev:  {stats.stdev(data)}")
+print("p95:    {stats.quantile(data, 0.95)}")
+print("range:  {stats.range_of(data)}")

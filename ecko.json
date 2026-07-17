@@ -1,0 +1,10 @@
+{
+  "name": "stats",
+  "version": "0.1.0",
+  "entrypoint": "main.ecko",
+  "description": "Descriptive statistics for Ecko: mean, median, mode, variance, stdev, quantiles. Pure - no capabilities.",
+  "author": "Sean Nieuwoudt <sean@underwulf.com>",
+  "license": "MIT",
+  "capabilities": [],
+  "dependencies": {}
+}

@@ -1,0 +1,106 @@
+# stats - descriptive statistics for Ecko.
+#
+#   import stats
+#
+#   stats.mean([2, 4, 6])          # 4.0
+#   stats.median([1, 2, 3, 4])     # 2.5
+#   stats.stdev(samples)           # sample standard deviation
+#   stats.quantile(xs, 0.95)       # 95th percentile
+#
+# Pure list math over the global builtins (sum/min/max/sqrt/sort). No
+# capabilities. Integer inputs are promoted to floats where a ratio is
+# involved, so results never silently truncate.
+
+fn need(xs, who) {
+    if type_of(xs) != "list" or len(xs) == 0 {
+        error({ kind: "value", message: "stats.{who}: needs a non-empty list" })
+    }
+}
+
+# Sum of squared deviations from the mean (shared by variance / pvariance).
+fn sum_sq_dev(xs) {
+    m = mean(xs)
+    mut ss = 0.0
+    for x in xs {
+        d = float(x) - m
+        ss = ss + d * d
+    }
+    ss
+}
+
+export fn mean(xs) {
+    need(xs, "mean")
+    float(sum(xs)) / float(len(xs))
+}
+
+export fn median(xs) {
+    need(xs, "median")
+    s = sort(xs)
+    n = len(s)
+    mid = n / 2
+    if n % 2 == 1 { float(s[mid]) } else { (float(s[mid - 1]) + float(s[mid])) / 2.0 }
+}
+
+# The most frequent value; on a tie, the smallest (deterministic).
+export fn mode(xs) {
+    need(xs, "mode")
+    s = sort(xs)
+    mut best = s[0]
+    mut best_count = 1
+    mut cur = s[0]
+    mut cur_count = 1
+    mut i = 1
+    while i < len(s) {
+        if s[i] == cur { cur_count = cur_count + 1 } else {
+            cur = s[i]
+            cur_count = 1
+        }
+        if cur_count > best_count {
+            best_count = cur_count
+            best = cur
+        }
+        i = i + 1
+    }
+    best
+}
+
+# Sample variance / standard deviation (n - 1).
+export fn variance(xs) {
+    need(xs, "variance")
+    if len(xs) < 2 {
+        error({ kind: "value", message: "stats.variance: needs at least two values" })
+    }
+    sum_sq_dev(xs) / float(len(xs) - 1)
+}
+
+export fn stdev(xs) = sqrt(variance(xs))
+
+# Population variance / standard deviation (n).
+export fn pvariance(xs) {
+    need(xs, "pvariance")
+    sum_sq_dev(xs) / float(len(xs))
+}
+
+export fn pstdev(xs) = sqrt(pvariance(xs))
+
+# The q-th quantile (q in 0..1) by linear interpolation between order statistics.
+export fn quantile(xs, q) {
+    need(xs, "quantile")
+    s = sort(xs)
+    n = len(s)
+    if n == 1 { return float(s[0]) }
+    pos = q * float(n - 1)
+    lo = int(pos)
+    frac = pos - float(lo)
+    if lo + 1 < n {
+        float(s[lo]) + frac * (float(s[lo + 1]) - float(s[lo]))
+    } else {
+        float(s[n - 1])
+    }
+}
+
+# max - min.
+export fn range_of(xs) {
+    need(xs, "range_of")
+    max(xs) - min(xs)
+}

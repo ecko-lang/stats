@@ -1,0 +1,43 @@
+# Tests for the stats package - offline, deterministic.
+import std.test
+import "../main.ecko"
+st = main
+
+test.case("mean", || {
+    test.eq(st.mean([2, 4, 6]), 4.0)
+    test.eq(st.mean([1, 2]), 1.5)
+})
+
+test.case("median, odd and even length", || {
+    test.eq(st.median([3, 1, 2]), 2.0)
+    test.eq(st.median([1, 2, 3, 4]), 2.5)
+})
+
+test.case("mode is the most frequent value (smallest on a tie)", || {
+    test.eq(st.mode([1, 2, 2, 3]), 2)
+    test.eq(st.mode([1, 1, 2, 2]), 1)
+})
+
+test.case("variance and stdev", || {
+    data = [2, 4, 4, 4, 5, 5, 7, 9]
+    test.eq(st.pvariance(data), 4.0)  # population
+    test.eq(st.pstdev(data), 2.0)
+    test.ok(abs(st.variance(data) - 4.571428571428571) < 0.000001, "sample variance = 32/7")
+})
+
+test.case("quantile with linear interpolation", || {
+    test.eq(st.quantile([1, 2, 3, 4, 5], 0.5), 3.0)
+    test.eq(st.quantile([1, 2, 3, 4], 0.5), 2.5)
+    test.eq(st.quantile([0, 10], 0.25), 2.5)
+    test.eq(st.quantile([1, 2, 3, 4, 5], 0.0), 1.0)
+    test.eq(st.quantile([1, 2, 3, 4, 5], 1.0), 5.0)
+})
+
+test.case("range_of", || {
+    test.eq(st.range_of([3, 7, 1, 9]), 8)
+})
+
+test.case("an empty list raises", || {
+    caught = try { st.mean([]) } catch (e) { get(e, "kind") }
+    test.eq(caught, "value")
+})
