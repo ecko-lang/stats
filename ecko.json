@@ -1,6 +1,6 @@
 {
-  "name": "stats",
-  "version": "0.1.0",
+  "module": "github.com/ecko-sh/stats",
+  "version": "0.9.1",
   "entrypoint": "main.ecko",
   "description": "Descriptive statistics for Ecko: mean, median, mode, variance, stdev, quantiles. Pure - no capabilities.",
   "author": "Sean Nieuwoudt <sean@underwulf.com>",
