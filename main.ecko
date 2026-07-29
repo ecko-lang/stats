@@ -28,11 +28,14 @@ fn sum_sq_dev(xs) {
     ss
 }
 
+## The arithmetic mean. Raises on an empty list.
 export fn mean(xs) {
     need(xs, "mean")
     float(sum(xs)) / float(len(xs))
 }
 
+## The middle value, averaging the two middle values for an even count.
+## Raises on an empty list.
 export fn median(xs) {
     need(xs, "median")
     s = sort(xs)
@@ -41,7 +44,7 @@ export fn median(xs) {
     if n % 2 == 1 { float(s[mid]) } else { (float(s[mid - 1]) + float(s[mid])) / 2.0 }
 }
 
-# The most frequent value; on a tie, the smallest (deterministic).
+## The most frequent value; on a tie, the smallest (deterministic).
 export fn mode(xs) {
     need(xs, "mode")
     s = sort(xs)
@@ -64,7 +67,7 @@ export fn mode(xs) {
     best
 }
 
-# Sample variance / standard deviation (n - 1).
+## Sample variance / standard deviation (n - 1).
 export fn variance(xs) {
     need(xs, "variance")
     if len(xs) < 2 {
@@ -73,17 +76,19 @@ export fn variance(xs) {
     sum_sq_dev(xs) / float(len(xs) - 1)
 }
 
+## Sample standard deviation (n-1) - the square root of `variance`.
 export fn stdev(xs) = sqrt(variance(xs))
 
-# Population variance / standard deviation (n).
+## Population variance / standard deviation (n).
 export fn pvariance(xs) {
     need(xs, "pvariance")
     sum_sq_dev(xs) / float(len(xs))
 }
 
+## Population standard deviation (n) - the square root of `pvariance`.
 export fn pstdev(xs) = sqrt(pvariance(xs))
 
-# The q-th quantile (q in 0..1) by linear interpolation between order statistics.
+## The q-th quantile (q in 0..1) by linear interpolation between order statistics.
 export fn quantile(xs, q) {
     need(xs, "quantile")
     s = sort(xs)
@@ -99,7 +104,7 @@ export fn quantile(xs, q) {
     }
 }
 
-# max - min.
+## max - min.
 export fn range_of(xs) {
     need(xs, "range_of")
     max(xs) - min(xs)
