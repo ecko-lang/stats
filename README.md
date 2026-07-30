@@ -1,6 +1,6 @@
 # stats
 
-Descriptive statistics for [Ecko](https://ecko.sh), written in Ecko. Pure — no
+Descriptive statistics for [Ecko](https://ecko.sh), written in Ecko. Pure - no
 capabilities.
 
 ## Install
@@ -46,4 +46,4 @@ ecko test tests/
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).
