@@ -6,7 +6,7 @@ capabilities.
 ## Install
 
 ```bash
-ecko get github.com/ecko-sh/stats
+ecko get github.com/ecko-lang/stats
 ```
 
 ## Usage
