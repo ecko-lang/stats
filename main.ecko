@@ -40,7 +40,7 @@ export fn median(xs) {
     need(xs, "median")
     s = sort(xs)
     n = len(s)
-    mid = n / 2
+    mid = n // 2
     if n % 2 == 1 { float(s[mid]) } else { (float(s[mid - 1]) + float(s[mid])) / 2.0 }
 }
 
